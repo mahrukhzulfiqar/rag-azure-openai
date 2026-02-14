@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from app.services.azure_openai_service import AzureOpenAIService
+from app.services.vector_store import InMemoryVectorStore
+
 
 app = FastAPI()
+vector_store = InMemoryVectorStore()
 
 # Initialize service
 azure_service = AzureOpenAIService()
@@ -26,3 +29,9 @@ def chat_with_model(message: str):
 def embed_text(text: str):
     embedding = azure_service.embed(text)
     return {"vector_length": len(embedding)}
+
+
+@app.post("/documents")
+def add_document(text: str):
+    vector_store.add_document(text)
+    return {"message": "Document added successfully"}
