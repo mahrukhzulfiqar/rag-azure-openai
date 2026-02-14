@@ -1,19 +1,17 @@
-import os
 from fastapi import FastAPI
-from dotenv import load_dotenv
 from openai import AzureOpenAI
 
-load_dotenv()
+from app.config import settings
 
 app = FastAPI()
 
 client = AzureOpenAI(
-    api_key=os.getenv("AZURE_OPENAI_KEY"),
+    api_key=settings.AZURE_OPENAI_KEY,
     api_version="2024-02-01",
-    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+    azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
 )
 
-deployment_name = os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT")
+deployment_name = settings.AZURE_OPENAI_CHAT_DEPLOYMENT
 
 
 @app.get("/")
