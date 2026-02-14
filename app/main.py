@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from app.services.azure_openai_service import AzureOpenAIService
 from app.services.vector_store import InMemoryVectorStore
-
+from app.models.rag_models import RagChatRequest
 
 app = FastAPI()
 vector_store = InMemoryVectorStore()
@@ -38,8 +38,8 @@ def add_document(text: str):
 
 
 @app.post("/rag-chat")
-def rag_chat(message: str):
-    relevant_docs = vector_store.search(message)
+def rag_chat(request: RagChatRequest):
+    relevant_docs = vector_store.search(request.message, top_k=request.top_k)
 
     context = "\n".join([doc[0] for doc in relevant_docs])
 
@@ -53,7 +53,7 @@ Context:
 {context}
 
 Question:
-{message}
+{request.message}
 """
 
     response = azure_service.chat(enhanced_prompt)
