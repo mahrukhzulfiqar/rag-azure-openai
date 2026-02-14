@@ -39,13 +39,10 @@ def add_document(text: str):
 
 @app.post("/rag-chat")
 def rag_chat(message: str):
-    # 1️⃣ Search relevant documents
     relevant_docs = vector_store.search(message)
 
-    # 2️⃣ Combine context
-    context = "\n".join([doc["text"] for doc in relevant_docs])
+    context = "\n".join([doc[0] for doc in relevant_docs])
 
-    # 3️⃣ Build enhanced prompt
     enhanced_prompt = f"""
 You are a helpful assistant.
 
@@ -59,7 +56,6 @@ Question:
 {message}
 """
 
-    # 4️⃣ Ask Azure OpenAI
     response = azure_service.chat(enhanced_prompt)
 
     return {"context_used": relevant_docs, "response": response}
