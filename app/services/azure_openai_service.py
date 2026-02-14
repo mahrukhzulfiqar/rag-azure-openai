@@ -9,7 +9,9 @@ class AzureOpenAIService:
             api_version="2024-02-01",
             azure_endpoint=settings.azure_openai_endpoint,
         )
+
         self.chat_deployment = settings.azure_openai_chat_deployment
+        self.embedding_deployment = settings.azure_openai_embedding_deployment
 
     def chat(self, message: str) -> str:
         response = self.client.chat.completions.create(
@@ -21,3 +23,11 @@ class AzureOpenAIService:
         )
 
         return response.choices[0].message.content
+
+    def embed(self, text: str) -> list[float]:
+        response = self.client.embeddings.create(
+            model=self.embedding_deployment,
+            input=text,
+        )
+
+        return response.data[0].embedding
