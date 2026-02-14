@@ -1,17 +1,10 @@
 from fastapi import FastAPI
-from openai import AzureOpenAI
-
-from app.config import settings
+from app.services.azure_openai_service import AzureOpenAIService
 
 app = FastAPI()
 
-client = AzureOpenAI(
-    api_key=settings.AZURE_OPENAI_KEY,
-    api_version="2024-02-01",
-    azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
-)
-
-deployment_name = settings.AZURE_OPENAI_CHAT_DEPLOYMENT
+# Initialize service
+azure_service = AzureOpenAIService()
 
 
 @app.get("/")
@@ -21,12 +14,9 @@ def read_root():
 
 @app.post("/chat")
 def chat_with_model(message: str):
-    response = client.chat.completions.create(
-        model=deployment_name,
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": message},
-        ],
-    )
-
-    return {"response": response.choices[0].message.content}
+    """
+    Simple chat endpoint that sends a message
+    to Azure OpenAI and returns the response.
+    """
+    response = azure_service.chat(message)
+    return {"response": response}
