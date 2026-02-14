@@ -20,3 +20,9 @@ def chat_with_model(message: str):
     """
     response = azure_service.chat(message)
     return {"response": response}
+
+
+@app.post("/embed")
+def embed_text(text: str):
+    embedding = azure_service.embed(text)
+    return {"vector_length": len(embedding)}
