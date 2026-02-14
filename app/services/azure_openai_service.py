@@ -5,11 +5,11 @@ from app.config import settings
 class AzureOpenAIService:
     def __init__(self):
         self.client = AzureOpenAI(
-            api_key=settings.AZURE_OPENAI_KEY,
+            api_key=settings.azure_openai_key,
             api_version="2024-02-01",
-            azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
+            azure_endpoint=settings.azure_openai_endpoint,
         )
-        self.chat_deployment = settings.AZURE_OPENAI_CHAT_DEPLOYMENT
+        self.chat_deployment = settings.azure_openai_chat_deployment
 
     def chat(self, message: str) -> str:
         response = self.client.chat.completions.create(

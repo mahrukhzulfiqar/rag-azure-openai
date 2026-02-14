@@ -1,16 +1,14 @@
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from pydantic_settings import BaseSettings
 
 
-class Settings:
-    AZURE_OPENAI_ENDPOINT: str = os.getenv("AZURE_OPENAI_ENDPOINT")
-    AZURE_OPENAI_KEY: str = os.getenv("AZURE_OPENAI_KEY")
-    AZURE_OPENAI_CHAT_DEPLOYMENT: str = os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT")
-    AZURE_OPENAI_EMBEDDING_DEPLOYMENT: str = os.getenv(
-        "AZURE_OPENAI_EMBEDDING_DEPLOYMENT"
-    )
+class Settings(BaseSettings):
+    azure_openai_endpoint: str
+    azure_openai_key: str
+    azure_openai_chat_deployment: str
+    azure_openai_embedding_deployment: str
+
+    class Config:
+        env_file = ".env"
 
 
 settings = Settings()
