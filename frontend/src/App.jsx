@@ -70,6 +70,9 @@ function App() {
   };
 
   return (
+  <div className="page-wrapper">
+    <h1 className="page-title">🤖 BOT Assistance</h1>
+
     <div className="chat-container">
       <div className="chat-header">
         <h1>✨ RAG Chat</h1>
@@ -108,7 +111,8 @@ function App() {
         <button onClick={sendMessage}>Send</button>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default App;
