@@ -248,12 +248,8 @@ This is a structured RAG implementation, not just a basic chatbot.
 ## 🔮 Future Improvements
 
 - Persistent vector database (FAISS / Pinecone / Azure AI Search)
-- Streaming responses
 - Conversation memory
 - Document chunking
-- Source citations in answers
-- Dockerization
-- Azure App Service deployment
 - Authentication system
 
 ---
