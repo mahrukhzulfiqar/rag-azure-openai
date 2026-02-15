@@ -2,8 +2,16 @@ from fastapi import FastAPI
 from app.services.azure_openai_service import AzureOpenAIService
 from app.services.vector_store import InMemoryVectorStore
 from app.models.rag_models import RagChatRequest
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 vector_store = InMemoryVectorStore()
 
 # Initialize service
