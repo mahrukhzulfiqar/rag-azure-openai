@@ -1,281 +1,82 @@
-# 🤖 BOT ChatBot — Retrieval Augmented Generation with Azure OpenAI
+# 🤖 AI Chatbot – Proof of Concept
 
-A full-stack AI chatbot built using:
+## Background
 
-- ⚡ FastAPI (Python backend)
-- 🧠 Azure OpenAI (GPT-4o-mini + Embeddings)
-- 🔎 Retrieval Augmented Generation (RAG)
-- 💬 React + Vite frontend
-- 📦 In-memory vector store
+This project is a proof of concept that explores how an AI-powered chatbot can make documentation easier to access and understand. Our team is responsible for maintaining and supporting a large number of applications. Over time, this has resulted in extensive documentation covering architecture, workflows, integrations, operational procedures, and technical decisions.
 
-This project demonstrates how to build a complete RAG pipeline using Azure OpenAI and modern full-stack architecture.
+While this documentation is valuable, finding specific information quickly can be difficult. Searching through Confluence pages to answer even a simple question often takes more time than expected. Information may be spread across multiple pages, structured differently, or buried within long documents.
+
+Onboarding new team members presents a similar challenge. New colleagues are required to review a large amount of documentation and attend numerous meetings to understand systems, dependencies, and processes. This makes onboarding time-consuming for both new joiners and existing team members.
 
 ---
 
-## 🚀 Features
+## The Challenge
 
-- Chat with Azure OpenAI
-- Generate embeddings using Azure
-- Store documents in a vector store
-- Semantic similarity search
-- Context-aware RAG responses
-- Clean FastAPI backend
-- Modern React chatbot UI
-- Environment-based configuration
-- Swagger API documentation
+The core challenges we face are:
 
----
+- Documentation is comprehensive but not always easy to navigate.
+- Finding answers to simple operational or architectural questions can take significant time.
+- Knowledge is distributed across many pages and formats.
+- Onboarding requires reviewing extensive material and scheduling multiple meetings.
+- Subject matter experts are frequently interrupted to answer recurring questions.
 
-## 🧠 What is RAG?
-
-**Retrieval Augmented Generation (RAG)** improves LLM responses by grounding them in external data.
-
-Instead of relying only on the model’s internal knowledge:
-
-1. Documents are converted into embeddings
-2. Stored in a vector store
-3. Relevant chunks are retrieved based on similarity
-4. Context is injected into the LLM prompt
-5. The model generates a grounded response
-
-This reduces hallucinations and makes responses more reliable.
+In short, the information exists — but accessing it efficiently is the problem.
 
 ---
 
-## 🏗️ Project Structure
+## The Idea
 
-```
-rag-azure-openai-1/
-│
-├── app/
-│   ├── main.py
-│   ├── config.py
-│   └── services/
-│       ├── azure_openai_service.py
-│       └── vector_store.py
-│
-├── frontend/
-│   └── React (Vite)
-│
-├── requirements.txt
-└── README.md
-```
+To address these challenges, I explored the idea of introducing an internal AI chatbot for the team.
+
+The concept is simple: instead of manually searching through Confluence or scheduling meetings for clarification, team members could ask questions directly in natural language. The chatbot would retrieve relevant documentation and generate contextual answers based on existing knowledge.
+
+This approach would:
+
+- Provide faster access to information.
+- Reduce time spent searching through documentation.
+- Support onboarding by allowing new team members to ask questions interactively.
+- Reduce repetitive questions directed at senior team members.
+- Act as a conversational interface on top of our existing documentation.
 
 ---
 
-## ⚙️ Backend Setup (FastAPI)
+## Purpose of This Proof of Concept
 
-### 1️⃣ Create Virtual Environment
+This proof of concept was created to validate whether such a solution is technically feasible and practically useful.
 
-```bash
-python -m venv venv
-source venv/bin/activate  # Mac/Linux
-```
+Specifically, it demonstrates that:
 
-### 2️⃣ Install Dependencies
+- Documentation can be indexed and searched semantically.
+- A chatbot can retrieve relevant content and generate contextual responses.
+- A conversational interface can sit on top of existing documentation.
+- The solution can be embedded into a simple web interface.
 
-```bash
-pip install -r requirements.txt
-```
-
-### 3️⃣ Create `.env` File
-
-Create a `.env` file in the root directory:
-
-```env
-AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com/
-AZURE_OPENAI_KEY=your_azure_key_here
-AZURE_OPENAI_CHAT_DEPLOYMENT=gpt-4o-mini
-AZURE_OPENAI_EMBEDDING_DEPLOYMENT=text-embedding-3-small
-```
-
-### 4️⃣ Run Backend
-
-```bash
-uvicorn app.main:app --reload
-```
-
-Backend runs at:
-
-```
-http://127.0.0.1:8000
-```
-
-Swagger Docs:
-
-```
-http://127.0.0.1:8000/docs
-```
+The goal is not to replace documentation, but to make it easier to access and use.
 
 ---
 
-## 🖥️ Frontend Setup (React + Vite)
+## Technologies Used
 
-### 1️⃣ Navigate to Frontend
+This POC was built using:
 
-```bash
-cd frontend
-```
+- **Flowise Cloud** for orchestration and chatflow management
+- **OpenAI GPT-4o** as the language model
+- **OpenAI Embeddings (text-embedding-3-small)** for semantic indexing
+- **Upstash (Vector Database)** for similarity-based retrieval
+- **Supabase (Postgres)** for document metadata management
+- **HTML + JavaScript** to embed the chatbot in a web page
 
-### 2️⃣ Install Node 22 (Recommended)
-
-If using `nvm`:
-
-```bash
-nvm install 22
-nvm use 22
-```
-
-### 3️⃣ Install Dependencies
-
-```bash
-npm install
-```
-
-### 4️⃣ Run Dev Server
-
-```bash
-npm run dev
-```
-
-Frontend runs at:
-
-```
-http://localhost:5173
-```
+Together, these components form a Retrieval-Augmented Generation (RAG) architecture that allows the chatbot to provide grounded, context-aware responses.
 
 ---
 
-## 📡 API Endpoints
+## Current Status
 
-### ➤ Add Document
+The proof of concept demonstrates:
 
-```
-POST /documents
-```
+- End-to-end AI integration
+- Document retrieval and contextual response generation
+- Web-based chatbot embedding
+- A potential improvement to how the team accesses internal knowledge
 
-Query parameter:
-
-```
-text=Your document text here
-```
-
----
-
-### ➤ Basic Chat (No RAG)
-
-```
-POST /chat
-```
-
-Query parameter:
-
-```
-message=Hello
-```
-
----
-
-### ➤ RAG Chat
-
-```
-POST /rag-chat
-```
-
-Request Body:
-
-```json
-{
-  "message": "What is RAG?",
-  "top_k": 3
-}
-```
-
----
-
-## 🔎 RAG Flow
-
-1. User uploads a document
-2. Document → embedding
-3. Stored in vector store
-4. User asks a question
-5. Question → embedding
-6. Similar documents retrieved
-7. Context injected into prompt
-8. GPT generates grounded answer
-
----
-
-## 🧩 Technologies Used
-
-### Backend
-
-- FastAPI
-- Pydantic
-- Azure OpenAI SDK
-- Uvicorn
-
-### Frontend
-
-- React
-- Vite
-- Modern CSS
-
-### AI Services
-
-- Azure OpenAI
-- GPT-4o-mini
-- text-embedding-3-small
-
----
-
-## 📌 Why This Project Matters
-
-This project demonstrates:
-
-- Real-world LLM integration
-- Azure OpenAI deployment usage
-- Embeddings + semantic search
-- Prompt engineering
-- Full-stack AI architecture
-- REST API design
-- Modern frontend integration
-
-This is a structured RAG implementation, not just a basic chatbot.
-
----
-
-## 🔮 Future Improvements
-
-- Persistent vector database (FAISS / Pinecone / Azure AI Search)
-- Streaming responses
-- Conversation memory
-- Document chunking
-- Source citations in answers
-- Dockerization
-- Azure App Service deployment
-- Authentication system
-
----
-
-## 🧪 Example
-
-Upload document:
-
-```
-RAG means Retrieval Augmented Generation.
-```
-
-Ask:
-
-```
-What is RAG?
-```
-
-Model responds using the stored context.
-
----
-
-## ⭐ If You Like This Project
-
-Give it a star on GitHub!
+This project validates the concept and provides a foundation for further evaluation.
